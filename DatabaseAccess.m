@@ -7,6 +7,7 @@
 //
 
 #import "DatabaseAccess.h"
+#import "AppController.h"
 
 @implementation DatabaseAccess
     
@@ -19,17 +20,21 @@
 @synthesize amount = _amount;
 @synthesize skip = _skip;
     
+    
+    /***************************************************************/
 -(id) init {
     NSLog(@"[DatabaseAccess init] called");
     self = [super init];
     if ( self ) {
-        [self setSkip:@"30"];
+        _databases = [[[NSApp delegate] databaseNames] retain];
+        [self setSkip:@"0"];
         [self setAmount:@"10"];
     }
     return self;
 }
     
     
+    /***************************************************************/
 - (IBAction)updateAdditionalPropertiesDict:(id)sender {
     NSLog(@"[DatabaseAccess updateAdditionalPropertiesDict] recieved: %@", sender);
     
@@ -51,6 +56,7 @@
 }
 
     
+    /***************************************************************/
 - (NSString *) additionalPropertiesAsString {
     
     NSLog(@"[DatabaseAccess additionalPropertiesAsString] entering, current dict is: %@", _additionalPropertiesDict);
@@ -68,5 +74,33 @@
     return props;
 }
     
+    
+    /***************************************************************/
+- (NSInteger)queryDBwithDatabase:db andCollection:coll {
+    
+    NSLog(@"[DatabaseAcces queryDBwithDatabase: andCollection:] selected database: %@ and collection: %@", db, coll);
+    
+    NSInteger count = 0;
+    
+    if ( [coll length] != 0 && coll != NULL && coll != nil )
+        count = [[NSApp delegate] countForDatabase:db
+                                     andCollection:coll
+                           withAddtionalProperties:[self additionalPropertiesAsString]];
+    
+    return count;
+}
+    
+
+    /***************************************************************/
+- (NSArray *)getIDsForDatabase:db andCollection:coll {
+
+    _IDs = [[NSApp delegate] idsForDatabase:db
+                              andCollection:coll
+                    withAddtionalProperties:[self additionalPropertiesAsString]
+                           restrictToAmount:[[self amount] intValue]
+                                 startingAt:[[self skip] intValue]];
+    
+    return _IDs;
+}
     
 @end

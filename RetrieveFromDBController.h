@@ -18,7 +18,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface RetrieveFromDBController : NSWindowController <NSComboBoxDelegate> {
+@interface RetrieveFromDBController : NSWindowController <NSComboBoxDelegate,NSTableViewDelegate> {
 
     IBOutlet NSButton    * openObjectButton;
     IBOutlet NSButton    * queryDBButton;
@@ -30,7 +30,8 @@
     
     IBOutlet NSComboBox * databaseSelection;
     IBOutlet NSComboBox * collectionSelection;
-    IBOutlet NSComboBox * idSelection;
+    
+    IBOutlet NSTableView * _idTableView;
 
     NSArray              * _databases;
     NSArray              * _collections;
@@ -44,7 +45,6 @@
 - (IBAction)queryDB:(id)sender;
 - (IBAction) getIdsForCurrentSelections:(id)sender;
 
-- (NSInteger)queryDB;
 - (void)updateCollection;
 
     

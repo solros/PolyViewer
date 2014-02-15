@@ -19,4 +19,10 @@
 
 use application "common";
 
-return @{get_db_list()};
+my @db = eval { @{get_db_list()}; };
+
+if ( $@ ) {
+    $db[0] = "ERROR : $@";
+}
+
+return @db;

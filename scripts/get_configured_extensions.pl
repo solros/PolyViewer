@@ -1,5 +1,5 @@
 #***********************************************************************
-# Created by Andreas Paffenholz on 05/02/14.
+# Created by Andreas Paffenholz on 14/02/14.
 # Copyright 2012-2014 by Andreas Paffenholz.
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -12,19 +12,23 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# get_type.pl
+# get_configured_extensions.pl
 # PolyViewer
 #**************************************************************************/
 
 
 use application "common";
 
-my $db_name = shift;
+# list of extensions that have been installed
+my @a = @extensions;
 
-my @col = eval { @{get_col_list($db_name)}; };
-
-if ( $@ ) {
-    $col[0] = "ERROR : $@";
+# we need to remove all extensions not configured for the current architecture
+foreach (reverse 0..$#extensions) {
+    if ( $disabled_extensions{$a[$_]} == 1 ) {
+        splice(@a,$_,1);
+    }
 }
+    
+foreach (@a) { $_=`cat $_/polymake.ext | egrep ^URI`; $_=~ s/.*\///; $_=~s/\#.*//; chomp; }
 
-return @col;
+return @a;

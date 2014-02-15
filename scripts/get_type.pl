@@ -18,7 +18,15 @@
 
 
 use application "common";
+use Try::Tiny;
+
 
 my $p = shift;
 
-return $p->type->full_name;
+my $type = eval { $p->type->full_nam; };
+
+if ( $@ ) {
+    $type = "ERROR: $@";
+}
+
+return $type;

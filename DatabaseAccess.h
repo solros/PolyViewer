@@ -29,8 +29,10 @@
     // passed to polymake in the form "skip=><skip>"
     NSString * _skip;
     
+    // the list of available databases
     NSArray  * _databases;
     NSArray  * _collections;
+
     NSArray  * _IDs;
     
 }
@@ -46,5 +48,7 @@
     
 - (IBAction)updateAdditionalPropertiesDict:(id)sender;
 - (NSString *) additionalPropertiesAsString;
+- (NSInteger)queryDBwithDatabase:db andCollection:coll;
+- (NSArray *)getIDsForDatabase:db andCollection:coll;
     
 @end
